@@ -1,0 +1,24 @@
+name: Build ZaloTools
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore
+        run: dotnet restore ZaloTools.sln
+
+      - name: Build
+        run: dotnet build ZaloTools.sln --configuration Release
