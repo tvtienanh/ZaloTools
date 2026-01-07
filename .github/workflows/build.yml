@@ -1,4 +1,4 @@
-name: Build ZaloTools
+name: Build ZaloTools (Portable)
 
 on:
   push:
@@ -20,12 +20,18 @@ jobs:
       - name: Restore
         run: dotnet restore ZaloTools.sln
 
-      - name: Build
-        run: dotnet build ZaloTools.sln --configuration Release
+      - name: Publish self-contained (win-x64)
+        run: |
+          dotnet publish ZaloTools.sln `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ZaloTools-build
+          name: ZaloTools-portable
           path: |
-            ZaloTools/bin/Release/
+            ZaloTools/bin/Release/**/publish/
